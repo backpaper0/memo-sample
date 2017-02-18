@@ -26,7 +26,7 @@
               </p>
               <ul class="menu-list">
                 <li v-for="memo in memos">
-                  <a v-on:click="edit(memo)">
+                  <a v-on:click="edit(memo)" :class="{ 'is-active': isActive(memo) }">
                     {{ memo.content | title }}
                   </a>
                 </li>

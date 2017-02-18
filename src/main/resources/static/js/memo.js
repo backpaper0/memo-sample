@@ -31,6 +31,9 @@ const methods = {
     this.current = current
     this.source = current.content
   },
+  isActive (memo) {
+    return this.current.id == memo.id
+  },
   save () {
     this.saving = true
     const saved = () => {
