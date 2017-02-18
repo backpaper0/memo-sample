@@ -1,6 +1,7 @@
 # ｃ⌒っﾟдﾟ)っφ　ﾒﾓﾒﾓ...
 
-[フロントエンド初心者勉強会 in 大阪](https://kanjava.connpass.com/event/49104/)に向けて作ったメモアプリケーション。
+[フロントエンド初心者勉強会 in 大阪](https://kanjava.connpass.com/event/49104/)
+に向けて作ったメモアプリケーション。
 
 ## 材料
 
@@ -17,9 +18,11 @@
 gradlew bootRun
 ```
 
-http://localhost:8080 をブラウザで開く。
+[http://localhost:8080](http://localhost:8080)
+をブラウザで開く。
 
-http://localhost:8080/h2-console でH2のコンソールも見れる。
+[http://localhost:8080/h2-console](http://localhost:8080/h2-console)
+でH2のコンソールも見れる。
 
 * JDBC URL: `jdbc:h2:file:./build/memo-db`
 * JDBC Username: `sa`
