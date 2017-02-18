@@ -1,0 +1,49 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.1.RELEASE'
+        domaVersion = '2.15.0'
+        springBootDomaVersion = '1.1.0'
+        domainConvertersProvider = 'com.example.domain.converter.DomainConvertersProvider'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply from: 'eclipse.gradle'
+apply plugin: 'org.springframework.boot'
+
+tasks.withType(JavaCompile) {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile('org.flywaydb:flyway-core')
+    compile('org.springframework.boot:spring-boot-starter-jdbc')
+    //compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    runtime('org.springframework.boot:spring-boot-devtools')
+    runtime('com.h2database:h2')
+    compile "org.seasar.doma:doma:$domaVersion"
+    compile "org.seasar.doma.boot:doma-spring-boot-starter:$springBootDomaVersion"
+    compile 'org.webjars.npm:vue:2.1.10'
+    compile 'org.webjars.npm:bulma:0.3.1'
+    compile 'org.webjars.npm:marked:0.3.6'
+}
+
+compileJava.options.compilerArgs = ["-Adoma.domain.converters=${domainConvertersProvider}"]
+
+compileJava.dependsOn processResources
+processResources.destinationDir = compileJava.destinationDir
+

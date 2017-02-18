@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>めも</title>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width"/>
+    <script type="text/javascript" src="https://unpkg.com/vue@2.1.10/dist/vue.js" data-th-src="@{'/webjars/vue/2.1.10/dist/vue.js'}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.js" data-th-src="@{'/webjars/marked/0.3.6/marked.min.js'}"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.css" data-th-href="@{'/webjars/bulma/0.3.1/css/bulma.css'}"/>
+  </head>
+  <body>
+    <div id="memo-app">
+      <section class="section">
+        <div class="columns">
+          <div class="column is-2">
+            <aside class="menu">
+              <ul class="menu-list">
+                <li>
+                  <a v-on:click="edit">
+                    あたらしいめも
+                  </a>
+                </li>
+              </ul>
+              <p class="menu-label">
+                めも
+              </p>
+              <ul class="menu-list">
+                <li v-for="memo in memos">
+                  <a v-on:click="edit(memo)">
+                    {{ memo.content | title }}
+                  </a>
+                </li>
+              </ul>
+            </aside>
+          </div>
+          <div class="column">
+            <p class="control">
+              <textarea class="textarea" placeholder="Styling with Markdown is supported" v-model="source">
+              </textarea>
+            </p>
+            <p class="control">
+              <button class="button" :class="{ 'is-disabled': (! source), 'is-primary': source, 'is-loading': saving }" v-on:click="save">
+                ｃ⌒っﾟдﾟ)っφ　ﾒﾓﾒﾓ...
+              </button>
+            </p>
+            <div class="notification is-primary" v-if="notified">
+              <button class="delete" v-on:click="closeNotification"></button>
+              保存しましたー
+            </div>
+          </div>
+          <div class="column">
+            <div class="content" v-html="built">
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <script type="text/javascript" src="../static/js/memo.js" data-th-src="@{'/js/memo.js'}"></script>
+  </body>
+</html>
