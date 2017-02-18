@@ -50,10 +50,8 @@ const methods = {
         })
       }
       const req = new Request('memos', init)
-      return fetch(req).then(resp => {
-        return resp.json().then(json => {
-          this.memos.unshift(json)
-        })
+      return fetch(req).then(resp => resp.json()).then(json => {
+        this.memos.unshift(json)
       })
     }
     proc().then(saved).catch(saved)
@@ -65,10 +63,8 @@ const methods = {
 
 const created = function() {
   const req = new Request('memos')
-  fetch(req).then(resp => {
-    resp.json().then(json => {
-      this.memos = json
-    })
+  fetch(req).then(resp => resp.json()).then(json => {
+    this.memos = json
   })
 }
 
