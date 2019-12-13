@@ -1,24 +1,20 @@
 package db.migration;
 
-import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import javax.sql.DataSource;
+
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
-import org.seasar.doma.boot.autoconfigure.DomaConfig;
-import org.seasar.doma.boot.autoconfigure.DomaConfigBuilder;
-import org.seasar.doma.boot.autoconfigure.DomaProperties;
 import org.seasar.doma.jdbc.Config;
-import org.seasar.doma.jdbc.ConfigSupport;
-import org.seasar.doma.jdbc.Naming;
+import org.seasar.doma.jdbc.dialect.Dialect;
 import org.seasar.doma.jdbc.dialect.H2Dialect;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
 import com.example.dao.MemoDao;
-import com.example.dao.MemoDaoImpl;
 import com.example.entity.Memo;
 
 public class V2__Sample_data extends BaseJavaMigration {
@@ -26,15 +22,22 @@ public class V2__Sample_data extends BaseJavaMigration {
     @Override
     public void migrate(Context context) throws Exception {
 
-        Config config = new DomaConfig(new DomaConfigBuilder()
-                .dialect(new H2Dialect())
-                .dataSource(new SingleConnectionDataSource(context.getConnection(), true))
-                .naming(Naming.SNAKE_LOWER_CASE)
-                .sqlFileRepository(ConfigSupport.defaultSqlFileRepository)
-                .entityListenerProvider(ConfigSupport.defaultEntityListenerProvider),
-                new DomaProperties());
+        DataSource dataSource = new SingleConnectionDataSource(context.getConnection(), true);
+        Dialect dialect = new H2Dialect();
+        Config config = new Config() {
+            @Override
+            public DataSource getDataSource() {
+                return dataSource;
+            }
 
-        MemoDao dao = new MemoDaoImpl(config);
+            @Override
+            public Dialect getDialect() {
+                return dialect;
+            }
+        };
+
+        MemoDao dao = (MemoDao) Class.forName("com.example.dao.MemoDaoImpl")
+                .getConstructor(Config.class).newInstance(config);
 
         Function<String, Memo> builder = content -> {
             Memo entity = new Memo();
