@@ -5,29 +5,34 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import org.flywaydb.core.api.migration.jdbc.JdbcMigration;
+
+import org.flywaydb.core.api.migration.BaseJavaMigration;
+import org.flywaydb.core.api.migration.Context;
 import org.seasar.doma.boot.autoconfigure.DomaConfig;
 import org.seasar.doma.boot.autoconfigure.DomaConfigBuilder;
+import org.seasar.doma.boot.autoconfigure.DomaProperties;
 import org.seasar.doma.jdbc.Config;
 import org.seasar.doma.jdbc.ConfigSupport;
 import org.seasar.doma.jdbc.Naming;
 import org.seasar.doma.jdbc.dialect.H2Dialect;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+
 import com.example.dao.MemoDao;
 import com.example.dao.MemoDaoImpl;
 import com.example.entity.Memo;
 
-public class V2__Sample_data implements JdbcMigration {
+public class V2__Sample_data extends BaseJavaMigration {
 
     @Override
-    public void migrate(Connection connection) throws Exception {
+    public void migrate(Context context) throws Exception {
 
         Config config = new DomaConfig(new DomaConfigBuilder()
                 .dialect(new H2Dialect())
-                .dataSource(new SingleConnectionDataSource(connection, true))
+                .dataSource(new SingleConnectionDataSource(context.getConnection(), true))
                 .naming(Naming.SNAKE_LOWER_CASE)
                 .sqlFileRepository(ConfigSupport.defaultSqlFileRepository)
-                .entityListenerProvider(ConfigSupport.defaultEntityListenerProvider));
+                .entityListenerProvider(ConfigSupport.defaultEntityListenerProvider),
+                new DomaProperties());
 
         MemoDao dao = new MemoDaoImpl(config);
 
